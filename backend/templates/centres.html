@@ -1,0 +1,131 @@
+{% extends "frontend/index.html" %}
+{% load static %}{% load l10n %}
+{% block extrahead %}
+<style>
+</style>
+{% endblock %}
+{% block content %}
+<div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-sm-6">
+        <div class="card h-100 col-sm-12">
+            <div class="card-header text-center">
+                <h1 class="font-weight-light">البحث عن مركز</h1>
+            </div>
+            <div class="card-body">
+                <form class="form">
+                    <select class="form-select">
+                        {% for province in provinces %}
+                            <option value="{{ province.pk }}">{{ province.nom}}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+            <div class="card-footer col-sm-12 text-center">
+                <button class="btn btn-primary"><i class="fa-solid fa-solid fa-magnifying-glass"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>اسم المركز</th>
+                    <th>رقم الهاتف</th>
+                    <th>العنوان</th>
+                    <th>الموقع الجغرافي</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for centre in centres %}
+                <tr>
+                    <td>{{ centre.nom }}</td>
+                    <td>{{ centre.telephone }}</td>
+                    <td>{{ centre.adresse }}</td>
+                    <td><a href="{% url 'f-centre-sanspr' pk=centre.pk %}">الموقع الجغرافي</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <!--<iframe width="500" height="400" frameborder="0" src="https://www.bing.com/maps/embed?h=400&w=500&cp={{ centre.latitude|unlocalize }}~-{{ centre.longitude|unlocalize }}&lvl=17&typ=d&sty=r&src=SHELL&FORM=MBEDV8" scrolling="no">
+        </iframe>
+        <div style="white-space: nowrap; text-align: center; width: 500px; padding: 6px 0;">
+            <a id="largeMapLink" target="_blank" href="https://www.bing.com/maps?cp={{ centre.latitude|unlocalize }}~{{ centre.longitude|unlocalize }}&amp;sty=r&amp;lvl=7&amp;FORM=MBEDLD">Afficher une carte plus grande</a> &nbsp; | &nbsp;
+            <a id="dirMapLink" target="_blank" href="https://www.bing.com/maps/directions?cp={{ centre.latitude|unlocalize }}~{{ centre.longitude|unlocalize }}&amp;sty=r&amp;lvl=7&amp;rtp=~pos.29.714381718091744_-9.807977350775786____&amp;FORM=MBEDLD">Calculer l’itinéraire</a>
+        </div>-->
+    </div>
+{% endblock %}
+{% block extrascripts %}
+<script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+<script type='text/javascript'>
+    var map;
+    var infobox;
+    function GetMap()
+    {
+        /*var mapInitOpts = {
+            credentials: 'AiJrp5OaIabzkHsyLH_6WplldYxjDdUrh_2zHLSeHFfStus5Pog8EYUKQFlZ0tUc',
+            mapTypeId: Microsoft.Maps.MapTypeId.road
+        };
+        var map = new Microsoft.Maps.Map('#myMap', mapInitOpts);*/
+        var myStyle = {
+            "elements": {
+                "railway": { "strokeColor": "#a495b2" },
+                "structure": { "fillColor": "#ffffff" },
+                "runway": { "fillColor": "#ff7fed" },
+                "area": { "fillColor": "#f39ebd" },
+                "political": { "borderStrokeColor": "#fe6850", "borderOutlineColor": "#55ffff" },
+                "point": { "iconColor": "#ffffff", "fillColor": "#FF6FA0", "strokeColor": "#DB4680" },
+            },
+            "version": "1.0"
+        };
+        var location = new Microsoft.Maps.Location({{ centre.latitude|unlocalize }}, -{{ centre.longitude|unlocalize }});
+        var map = new Microsoft.Maps.Map('#myMap', {
+                credentials: 'AuB_MrFeY30digCgDtkn4EVjrPYBvGcbPg8KJoKdmFboMoB7SyallMbs8wWnBMJd',
+                customMapStyle: myStyle,
+                center: location,
+                mapTypeId: Microsoft.Maps.MapTypeId.roud,
+                zoom: 17
+        });
+
+        //Create an infobox at the center of the map but don't show it.
+        infobox = new Microsoft.Maps.Infobox(map.getCenter(), {
+            visible: false
+        });
+
+        //Assign the infobox to a map instance.
+        infobox.setMap(map);
+
+        //Create a pushpin at a random location in the map bounds.
+        var randomLocation = Microsoft.Maps.TestDataGenerator.getLocations(1, map.getBounds());
+        var pin = new Microsoft.Maps.Pushpin(location);
+
+        //Store some metadata with the pushpin.
+        pin.metadata = {
+            title: '{{ centre.nom }}',
+            description: '{{ centre.nom }}'
+        };
+
+        //Add a click event handler to the pushpin.
+        Microsoft.Maps.Events.addHandler(pin, 'click', pushpinClicked);
+
+        //Add pushpin to the map.
+        map.entities.push(pin);
+
+        //Add your post map load code here.
+    };
+    function pushpinClicked(e) {
+        //Make sure the infobox has metadata to display.
+        if (e.target.metadata) {
+            //Set the infobox options with the metadata of the pushpin.
+            infobox.setOptions({
+                location: e.target.getLocation(),
+                title: e.target.metadata.title,
+                description: e.target.metadata.description,
+                visible: true
+            });
+        }
+    }
+</script>
+{% endblock %}

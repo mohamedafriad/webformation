@@ -1,0 +1,64 @@
+{% extends "index.html" %}
+{% load static %}{% load i18n  %}
+{% block title %}Inscription{% endblock %}
+{% block extrahead %}
+{% endblock %}
+{% block content %}
+<!-- Heading Row-->
+  <div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-sm-12">
+      <div class="card h-100">
+        <div class="card-header text-center">
+          <h1 class="font-weight-light">Inscription à la formation : <span class="gras">{{ formation.sujet }}</span></h1>
+        </div>
+        <div class="card-body col-sm-12">
+            {% if form.errors %}
+                <div class="row alert bg-danger">
+                {{ form.errors }}
+                </div>
+            {% endif %}
+            <form class="row g-3" method="post" action="{% url 'form-inscription' formation_pk=formation.pk %}">{% csrf_token %}
+            <div class="col-md-6">
+              <label class="form-label" for="cin">N° CIN : </label>
+              <input type="text" class="form-control" name="cin" {% if form.cin.value %}value="{{ form.cin.value }}"{% else %}placeholder="N° CIN"{% endif %} />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="nom">Nom</label>
+              <input type="text" class="form-control" name="nom" required {% if form.nom.value %}value="{{ form.nom.value }}"{% else %}placeholder="Nom"{% endif %} />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="prenom">Prénom</label>
+              <input type="text" class="form-control" name="prenom" {% if form.prenom.value %}value="{{ form.prenom.value }}"{% else %}placeholder="Prénom"{% endif %} />
+            </div>
+            <div class="col-md-6">
+                <label class="form-label" for="niveau">Niveau Scolaire</label>
+                <select class="form-control form-select" name="niveau" required {% if form.niveau.value %}{% else %}placeholder="Niveau Scolaire"{% endif %}>
+                    {% for value, text in form.niveau.field.choices %}
+                        <option value="{{ value }}" {% if form.niveau.value == value %}selected='selected'{% endif %}><span class="select-text">{{ text }}</span></option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="age">Âge</label>
+              <input type="number" class="form-control" name="age" required placeholder="Age" {% if form.age.value %}value="{{ form.age.value }}"{% else %}placeholder="Votre Äge"{% endif %}/>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="telephone">Téléphone</label>
+              <input type="phone" class="form-control" name="telephone" {% if form.telephone.value %}value="{{ form.telephone.value }}"{% else %}placeholder="Votre numéro de téléphone"{% endif %} />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="email">E-Mail</label>
+              <input type="email" class="form-control" name="email" {% if form.email.value %}value="{{ form.email.value }}"{% else %}placeholder="Votre E-Mail"{% endif %} />
+            </div>
+        </div>
+        <div class="card-footer col-sm-12 text-center">
+          <div class="col-sm-12 btns-form text-center">
+            <button class="btn btn-danger gras" type="reset">Annuler</button>
+            <button class="btn btn-primary gras" type="submit">Valider</button>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

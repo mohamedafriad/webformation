@@ -1,0 +1,38 @@
+{% extends "frontend/index.html" %}
+{% load static %}{% load i18n grp_tags %}
+{% block title %}خدماتي - COAPH - الفضاء الخاص{% endblock %}
+{% block extrahead %}
+{% endblock %}
+{% block content %}
+<!-- Heading Row-->
+  <div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-sm-12">
+      <div class="card h-100">
+        <div class="card-header text-center">
+          <h1 class="font-weight-light">الولوج إلى الفضاء الخاص</h1>
+        </div>
+        <div class="card-body col-sm-12">
+          <form class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label" for="cin">رقم البطاقة الوطنية</label>
+              <input type="text" class="form-control" name="cin" placeholder="رقم البطاقة الوطنية" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="date_naissance">تاريخ الازدياد</label>
+              <input type="date" class="form-control" name="date_naissance" placeholder="تاريخ الازدياد" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="nom_ben">الاسم العائلي</label>
+              <input type="text" class="form-control" name="nom_ben" placeholder="الاسم العائلي" />
+            </div>
+          </form>
+        </div>
+        <div class="card-footer col-sm-12 text-center">
+          <div class="col-md-12">
+            <a class="btn btn-danger" href="{% url 'f-espace' %}">الولوج</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
