@@ -21,7 +21,13 @@ class ContactForm(forms.Form):
 class InscriptionForm(forms.Form):
     username = forms.CharField(required =True)
     email = forms.EmailField(required=True)
-    #mot_passe = forms.CharField(required=True, widget=forms.PasswordInputField())
-    #mot_passe_confirm = forms.CharField(required=True, widget=forms.PasswordInputField())
+    #mot_passe = forms.CharField(required=True, widget=forms.PasswordInput())
+    #mot_passe_confirm = forms.CharField(required=True, widget=forms.PasswordInput())
     telephone = forms.CharField(required=False)
+
+
+#formulaire de connexion à l'espace personnel
+class ConnexionForm(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(required=True)
 

@@ -19,6 +19,10 @@ from backend import views as back_views
 
 urlpatterns = [
     path('', back_views.index, name="front"),
+    path('connexion/', back_views.connexion, name="connexion"),
+    path('deconnexion/', back_views.deconnexion, name="deconnexion"),
+    path('inscription/', back_views.inscription, name="inscription"),
+    path('espace/', back_views.formations, name="espace"),
     path('formations/', back_views.formations, name="formations-list"),
     path('formations/<formation_pk>/inscription/', back_views.inscription, name="form-inscription"),
     path('contact/', back_views.contact, name="contact"),

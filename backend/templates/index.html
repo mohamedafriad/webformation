@@ -117,7 +117,7 @@
     </head>
     <body>
         <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-expand-sm" width="100%">
+        <nav class="navbar navbar-expand-lg navbar-expand-sm .navbar-expand-md .navbar-expand-xl" >
             <div class="container px-5">
                 <a class="navbar-brand" href="{% url 'front' %}">Web Formation</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,14 +132,23 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'formations-list' %}">Liste Formations <i class="fa-solid fa-book"></i></a></li>
+                            <a class="nav-link" href="{% url 'formations-list' %}">Formations <i class="fa-solid fa-book"></i></a></li>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#!">Espace Personnel <i class="fa-solid fa-user"></i></a>
-                            </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'contact' %}">Contactez nous <i class="fa-solid fa-phone"></i></a>
                         </li>
+                        {% if request.session.connected %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'espace' %}">Bonjour {{ request.session.user }} <i class="fa-solid fa-user"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'deconnexion' %}">Déconnexion <i class="fa-solid fa-logout"></i></a>
+                        </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'connexion' %}">Se Connecter <i class="fa-solid fa-login"></i></a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -190,7 +199,7 @@
             <div class="row gx-4 gx-lg-5 align-items-center my-1">
                 <div class="col-sm-12">
                     <div class="col-sm-12 col-lg-12 align-items-center ">
-                        <iframe width="300" height="154" src="https://w2.countingdownto.com/4187395" frameborder="0" class="col-sm-12 col-lg-12 align-items-center "></iframe>
+                        <iframe width="471" height="242" src="https://w2.countingdownto.com/4200997" frameborder="0" class="col-sm-12 col-lg-12 align-items-center "></iframe>
                     </div>
                         <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
                             <div class="carousel-indicators">

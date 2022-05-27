@@ -3,12 +3,36 @@ from django.http import HttpResponseRedirect
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import Formation, Participant, Inscription
-from .forms import ParticipantForm, ContactForm
+from .forms import ParticipantForm, ContactForm, ConnexionForm
 
+#la page d'accueil
 def index(request):
     formations=Formation.objects.all()
     return render(request, template_name="index.html", context={'formations': formations})
 
+#Traitement de la connexion à l'espace personnel
+def connexion(request):
+    if request.method == "POST":
+        form = ConnexionForm(request.POST)
+        if form.is_valid():
+            participant = Participant.objects.get(email=form.cleaned_data['email'])
+            formations=Formation.objects.all()
+            request.session['connected'] = True
+            request.session['user'] = participant.__str__()
+            return render(request, template_name="espace.html", context={'participant': participant, 'formations': formations})
+            #return render(request, template_name="connexion.html", context={'form': form, 'connected': False})
+        else:
+            return render(request, template_name="connexion.html", context={'form': form, 'connected': False})
+    else:
+        form = ConnexionForm()
+        return render(request, template_name="connexion.html", context={'form': form, 'connected': False})
+
+def deconnexion(request):
+    request.session['connected'] = False
+    request.session['user'] = None
+    return redirect('front')
+
+#envoie un email au bénéficiaire après l'inscription à la formation
 def send_email_success(email):
     try:
         subject = "Merci pour votre inscription à la formation"
@@ -20,10 +44,15 @@ def send_email_success(email):
     except:
         return False
 
-def inscription(request, formation_pk):
+
+#Tritament de l'action d'inscription rapide
+def inscription(request, formation_pk=None):
     try:
-        formation = Formation.objects.get(pk=formation_pk)
-        if formation.etat != "O":
+        if formation_pk:
+            formation = Formation.objects.get(pk=formation_pk)
+            if formation.etat != "O":
+                return redirect('formations-list')
+        else:
             return redirect('formations-list')
     except:
         return redirect('formations-list')
@@ -42,13 +71,15 @@ def inscription(request, formation_pk):
     else:
         return render(request, template_name="inscription.html", context={'formation': formation, 'form': form})
 
+
 def formations(request):
     search=request.GET.get("search_formation")
+    connected = request.session.get("connected")
     if search:
         formations=Formation.objects.filter(sujet__contains=search)
     else:
         formations=Formation.objects.all()
-    return render(request, template_name="formations.html", context={'formations': formations})
+    return render(request, template_name="formations.html", context={'formations': formations, 'connected': connected})
 
 
 def send_email_contact(email, message):

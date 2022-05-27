@@ -1,38 +1,71 @@
-{% extends "frontend/index.html" %}
-{% load static %}{% load i18n grp_tags %}
-{% block title %}خدماتي - COAPH - الفضاء الخاص{% endblock %}
+{% extends "index.html" %}
+{% load static %}{% load l10n %}
 {% block extrahead %}
+<style>
+</style>
 {% endblock %}
 {% block content %}
-<!-- Heading Row-->
-  <div class="row gx-4 gx-lg-5 align-items-center my-5">
+<div class="row gx-4 gx-lg-5 align-items-center my-5">
+    {% if message %}
     <div class="col-sm-12">
-      <div class="card h-100">
-        <div class="card-header text-center">
-          <h1 class="font-weight-light">الولوج إلى الفضاء الخاص</h1>
-        </div>
-        <div class="card-body col-sm-12">
-          <form class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label" for="cin">رقم البطاقة الوطنية</label>
-              <input type="text" class="form-control" name="cin" placeholder="رقم البطاقة الوطنية" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="date_naissance">تاريخ الازدياد</label>
-              <input type="date" class="form-control" name="date_naissance" placeholder="تاريخ الازدياد" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label" for="nom_ben">الاسم العائلي</label>
-              <input type="text" class="form-control" name="nom_ben" placeholder="الاسم العائلي" />
-            </div>
-          </form>
-        </div>
-        <div class="card-footer col-sm-12 text-center">
-          <div class="col-md-12">
-            <a class="btn btn-danger" href="{% url 'f-espace' %}">الولوج</a>
-          </div>
-        </div>
-      </div>
+        <p class="alert alert-primary bg-primary alertmsg">Votre demande d'inscription à la formation est bien enregistrée. Merci</p>
     </div>
-  </div>
+    {% endif %}
+    <div class="col-sm-3 mx-50 px-20"></div>
+    <div class="col-sm-6 mx-50 px-20">
+        <div class="card h-100 col-sm-12">
+            <h5 class="card-header gras">Rechercher une formation</h5>
+            <div class="card-body">
+                <form class="form" action="{% url 'formations-list' %}" method="get">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="search_formation" placeholder="Saisir le nom de la formation ...." aria-label="Rechercher" aria-describedby="button-addon2">
+                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row gx-4 gx-lg-5 align-items-center my-5">
+    <div class="col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Code Formation</th>
+                    <th>Sujet</th>
+                    <th>Date Début</th>
+                    <th>Date Fin</th>
+                    <th>Lieu</th>
+                    <th>Nbre de place</th>
+                    <th>Places Disponibles</th>
+                    <th>Prix</th>
+                    <th>Etat</th>
+                    <th>Participer?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for formation in formations %}
+                <tr class="gras">
+                    <td>{{ formation.code }}</td>
+                    <td>{{ formation.sujet }}</td>
+                    <td>{{ formation.date_debut|date:"l d M Y" }} {{ formation.date_debut|time:"H:i" }}</td>
+                    <td>{{ formation.date_fin|date:"l d M Y" }} {{ formation.date_fin|time:"H:i" }}</td>
+                    <td>{{ formation.lieu }}</td>
+                    <td>{{ formation.nbre_place }}</td>
+                    <td>{{ formation.place_dispo }}</td>
+                    <td>{{ formation.prix }}</td>
+                    <td><span class="badge {% if formation.etat == 'O' %}bg-success{% elif formation.etat == 'T' %}bg-primary{% else %}bg-danger{% endif %} badge-light">{{ formation.get_etat_display }}</span></td>
+                    <td>{% if formation.etat == 'O' %}
+                        <a href="{% url 'form-inscription' formation_pk=formation.pk %}" class="badge bg-primary"><i class="fa-solid fa-user-plus">Par Ici</i></a>
+                        {% else %}
+                        <span class="badge bg-danger">Inscrption fermée</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
 {% endblock %}
+{% block extrascripts %}{% endblock %}

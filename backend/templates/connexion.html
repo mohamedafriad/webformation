@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% load static %}{% load i18n  %}
-{% block title %}Inscription{% endblock %}
+{% block title %}Connexion{% endblock %}
 {% block extrahead %}
 {% endblock %}
 {% block content %}
@@ -19,8 +19,8 @@
               <input type="email" class="form-control" name="email" placeholder="Votre E-Mail ici ..." required/>
             </div>
             <div class="col-md-12">
-              <label class="form-label" for="motpasse">Votre mot de passe</label>
-              <input type="password" class="form-control" name="motpasse" placeholder="Votre mot de passe ici ..." required/>
+              <label class="form-label" for="password">Votre mot de passe</label>
+              <input type="password" class="form-control" name="password" placeholder="Votre mot de passe ici ..." required/>
             </div>
         </div>
         <div class="card-footer col-sm-12 text-center">
@@ -42,7 +42,7 @@
                 {{ form.errors }}
                 </div>
             {% endif %}
-            <form class="row g-3" method="post" action="{% url 'form-inscription' formation_pk=formation.pk %}">{% csrf_token %}
+            <form class="row g-3" method="post" action="{% url 'inscription' %}">{% csrf_token %}
             <div class="col-md-6">
               <label class="form-label" for="cin">N° CIN : </label>
               <input type="text" class="form-control" name="cin" {% if form.cin.value %}value="{{ form.cin.value }}"{% else %}placeholder="N° CIN"{% endif %} />
